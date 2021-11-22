@@ -36,15 +36,15 @@ class Bil(object):
     
     
     
-##########################################################
-##########################################################
+#############################  HJELPEFUNKSJONER, TOPIC CALLBACKS
+#############################
 
 
   
   def sub_cb(self, msg):
     dist = msg.data
     if dist < 15 and self.cancelled == 0:
-      self.rospy.loginfo("action aborted, waiting for new goal")
+      self.rospy.loginfo("obstacle detected, aborted, distance: " + str(dist))
       self._result.tid = self.tok-self.tik
       self._as.set_aborted(self._result)
       self.success = False
@@ -89,8 +89,8 @@ class Bil(object):
       self.pub.publish(self.var)
     
     
-#############################################################
-#############################################################
+################################ HOVEDFUNKSJON
+################################
 
     
   def execute_callback(self, goal):
@@ -107,16 +107,16 @@ class Bil(object):
     if goal.figur == "sirkel_left":
       self.success = True
       
-      while i < goal.reps:
+      while i < goal.reps and self.cancelled != 1:
       
       
         self._feedback.current_rep = i+1
         self._as.publish_feedback(self._feedback)
         
-        self.var.linear.x = .0
+        self.var.linear.x = .8
         self.var.angular.z = 0.8
         self.pub.publish(self.var)
-        for i in range(6):
+        for n in range(6):
           time.sleep(0.517)          
         
         i += 1
@@ -125,16 +125,16 @@ class Bil(object):
     if goal.figur == "sirkel_right":
       self.success = True
       
-      while i < goal.reps:
+      while i < goal.reps and self.cancelled != 1:
       
       
         self._feedback.current_rep = i+1
         self._as.publish_feedback(self._feedback)
         
-        self.var.linear.x = 0.0
+        self.var.linear.x = 0.8
         self.var.angular.z = -0.8
         self.pub.publish(self.var)
-        for i in range(6):
+        for n in range(6):
           time.sleep(0.517)          
         
         i += 1
@@ -154,7 +154,9 @@ class Bil(object):
 
         i += 1
       
-     
+      
+    
+    
     
     elif goal.figur == "straight":
       while True:
@@ -164,7 +166,9 @@ class Bil(object):
         if self.cancelled == 1:
           break
     
-
+    
+    
+    
     self.stopp()
     self.tok = time.time()
     
@@ -176,11 +180,15 @@ class Bil(object):
       self._as.set_succeeded(self._result)
       return True
       
-##########################################################
-##########################################################
 
 if __name__ == '__main__':
   rospy.init_node('figur_server')
   rospy.loginfo('waiting for goal')
   Bil()
   rospy.spin()
+
+      
+      
+      
+    
+    
