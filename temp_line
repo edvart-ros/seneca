@@ -8,34 +8,38 @@ import rospy
 from std_msgs.msg import String, Float32
 from echopkg.msg import color_msg
 
-rospy.init_node('line_follower')
+rospy.init_node('line_follower_action')
 
-pub = rospy.Publisher('/cmd_vel', Twist, queue_size = 1)
-cam = cv2.VideoCapture(0)  # velger kameraet
+class line_server(object):
+  
 
-var = Twist()
-var.linear.x = 0.4
-pub.publish(var)
-time.sleep(0.5)
-var.linear.x = .30
-pub.publish(var)
-time.sleep(1)
-var.linear.x = .25
-pub.publish(var)
+  self.pub = rospy.Publisher('/cmd_vel', Twist, queue_size = 1)
+  self.cam = cv2.VideoCapture(0)  # velger kameraet
+
+  self.var = Twist()
+  self.img = cam.read()[1]
+  self.dim = (int(img.shape[1] * 15 /100), int(img.shape[0] * 15 /100)
+  self.height, self.width, self.channels = self.img.shape
+             
+  self.lower_yellow = np.array([20, 100, 100])
+  self.upper_yellow = np.array([50, 255, 255])
+  self.prev = 0
+              
+  var.linear.x = 0.4
+  pub.publish(var)
+  time.sleep(0.5)
+  var.linear.x = .30
+  pub.publish(var)
+  time.sleep(1)
+  var.linear.x = .25
+  pub.publish(var)
 
 
-img = cam.read()[1]  
-width = int(img.shape[1] * 15 /100)
-height = int(img.shape[0] * 15 /100)
-dim = (width, height)
+#img = cam.read()[1]  
+#width = int(img.shape[1] * 15 /100)
+#height = int(img.shape[0] * 15 /100)
+#dim = (width, height)
 
-
-height, width, channels = img.shape
-
-lower_yellow = np.array([20, 100, 100])
-upper_yellow = np.array([50, 255, 255])
-
-prev = 0
 
 
 while True:
@@ -90,7 +94,7 @@ while True:
   
   
   #print('hastighet', var.linear.x,'    styring', var.angular.z)
-  if cv2.waitKey(1) == ord("q"):    #avslutter loopen og slutter a publisere ved tastetrykk q
+  if cv2.waitKey(1) == ord("q"):    
     break
   
     
