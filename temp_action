@@ -175,6 +175,16 @@ class Bil(object):
     
     elif goal.figur == "line":
         
+      self.var.linear.x = 0.4
+      self.var.linear.x = 0.4
+      self.pub.publish(self.var)
+      time.sleep(0.3)
+      self.var.linear.x = .30
+      self.pub.publish(self.var)
+      time.sleep(0.3)
+      self.var.linear.x = .25
+      self.pub.publish(self.var)
+      
       s = 0
       while True:
                 
