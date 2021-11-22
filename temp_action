@@ -219,6 +219,8 @@ class Bil(object):
     
     self._result.tid = self.tok-self.tik
     
+    self.cam.release()
+    cv2.destroyAllWindows()
       
     if self.success == True:
       rospy.loginfo('success, waiitng for new goal')
