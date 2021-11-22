@@ -201,7 +201,7 @@ class Bil(object):
 
           error_x = cx - self.width / 2;
 
-          self.var.angular.z = round(    ((((-error_x-240)/75)/1.7-0.25)*2)/1.5     , 2)
+          self.var.angular.z = round(((((-error_x-240)/75)/1.7-0.25)*2)/1.5     , 2)
           self.var.linear.x = 0.25
           new = self.var.angular.z
 
