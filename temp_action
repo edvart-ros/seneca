@@ -65,7 +65,7 @@ class Bil(object):
       self.success = False
       self.stopp()
       self.cancelled = 1
-      return self.cancelled
+      return False
       
     
   def stopp(self):
