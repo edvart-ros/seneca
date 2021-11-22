@@ -227,7 +227,8 @@ class Bil(object):
     self.stopp()
     self.tok = time.time()
     
-    self._result.tid = self.tok-self.tik
+    if self.cancelled == 0:
+      self._result.tid = self.tok-self.tik
     
     self.cam.release()
     cv2.destroyAllWindows()
