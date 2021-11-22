@@ -79,24 +79,18 @@ class Bil(object):
     time.sleep(0.1)
     
     for i in range(4):
-      
       if self.cancelled == 1:
         break
-        
       self.var.linear.x = 0.5
       self.pub.publish(self.var)
-      time.sleep(.7)
-                
+      time.sleep(.7)     
       if self.cancelled == 1:
         break
-      
       self.var.angular.z = 0.7
       self.pub.publish(self.var)
       time.sleep(1.1)
-      
       if self.cancelled == 1:
         break
-
       self.var.angular.z = 0
       self.pub.publish(self.var)
     
