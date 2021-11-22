@@ -240,9 +240,3 @@ if __name__ == '__main__':
   rospy.loginfo('waiting for goal')
   Bil()
   rospy.spin()
-
-      
-      
-      
-    
-    
