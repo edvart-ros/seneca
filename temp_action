@@ -5,9 +5,8 @@ from echopkg.msg import FigurAction, FigurFeedback, FigurResult
 import actionlib
 import time
 import numpy as np
-from std_msgs.msg import S
+from std_msgs.msg import String, Float32
 from geometry_msgs.msg import Twist
-from actionlib_msgs.msg import GoalID
 import cv2
 
 
@@ -40,8 +39,8 @@ class Bil(object):
     #linje init
     
     self.cam = cv2.VideoCapture(0)
-    self.img = cam.read()[1]
-    self.dim = (int(img.shape[1] * 15 /100), int(img.shape[0] * 15 /100)
+    self.img = self.cam.read()[1]
+    self.dim = int(self.img.shape[1] * 15 /100), int(self.img.shape[0] * 15 /100)
     self.height, self.width, self.channels = self.img.shape
 
     self.lower_yellow = np.array([20, 100, 100])
@@ -175,13 +174,14 @@ class Bil(object):
     
     
     elif goal.figur == "line":
-      
-        while True:
+        
+      s = 0
+      while True:
                 
-          self.img = cam.read()[1]
-          self.img = cv2.resize(self.img, dim, interpolation = cv2.INTER_NEAREST)
+          self.img = self.cam.read()[1]
+          self.img = cv2.resize(self.img, self.dim, interpolation = cv2.INTER_NEAREST)
           hsv_img = cv2.cvtColor(self.img, cv2.COLOR_BGR2HSV).astype(np.float)
-          mask = cv2.inRange(hsv_img, lower_yellow, upper_yellow)
+          mask = cv2.inRange(hsv_img, self.lower_yellow, self.upper_yellow)
           res = cv2.bitwise_and(self.img, self.img, mask = mask)
 
           m = cv2.moments(mask, False)
@@ -190,12 +190,12 @@ class Bil(object):
             cx, cy = m['m10']/m['m00'], m['m01']/m['m00']
 
           except ZeroDivisionError:
-            cy, cx = height/2, width/2
+            cy, cx = self.height/2, self.width/2
 
           cv2.circle(res, (int(cx), int(cy)), 5, (0,0,255), -1)
           cv2.imshow('RES', res)
 
-          error_x = cx - width / 2;
+          error_x = cx - self.width / 2;
 
           self.var.angular.z = round(    ((((-error_x-240)/75)/1.7-0.25)*2)/1.5     , 2)
           self.var.linear.x = 0.25
@@ -205,9 +205,9 @@ class Bil(object):
             self.var.angular.z = 0
             s += 1
 
-          elif (new - prev > 0.05) or (new-prev < -0.05):
-            prev = self.var.angular.z 
-            pub.publish(self.var)
+          elif (new - self.prev > 0.05) or (new-self.prev < -0.05):
+            self.prev = self.var.angular.z 
+            self.pub.publish(self.var)
             s = 0
 
           if cv2.waitKey(1) == ord("q") or s > 50 or self.cancelled == 1:    
