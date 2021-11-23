@@ -1,6 +1,0 @@
-string figur
-int32 reps
----
-float32 tid
----
-float32 current_rep

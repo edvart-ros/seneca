@@ -1,6 +1,0 @@
-<launch>
-  <node pkg = "echopkg" type = "cmdsub.py" name = "cmd_vel_node" output = "screen" />
-
-  <node pkg = "echopkg" type = "echopub.py" name = "echo_node" output = "screen" />
-  
-</launch>

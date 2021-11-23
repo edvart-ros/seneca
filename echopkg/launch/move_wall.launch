@@ -1,4 +1,0 @@
-<launch>
-  <node pkg = "echopkg" type = "move_wall.py" name = "move_node_wall" output = "screen" />
-  
-</launch>
