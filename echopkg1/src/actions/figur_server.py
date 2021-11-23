@@ -44,6 +44,7 @@ class Bil(object):
     
     
     
+    
 #############################  HJELPEFUNKSJONER, TOPIC CALLBACKS
 #############################
 
@@ -233,11 +234,12 @@ class Bil(object):
           elif (new - prev > 0.05) or (new-prev < -0.05):       #legger inn en kontroll som reduserer smaa justeringer av styringen
             prev = self.var.angular.z 
             self.pub.publish(self.var)
-
+          
+          
           if self.cv2.waitKey(1) == ord("q") or self.done == 1:      #sorger for at programmet kan stoppes og kameraet kan "releases"
             cam.release()
             break
-                
+            
                 
     self.stopp()                                                #stopper bilen
     self.tok = time.time()
