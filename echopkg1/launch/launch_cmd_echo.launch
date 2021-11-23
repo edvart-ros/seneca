@@ -1,0 +1,5 @@
+<launch>
+  <node pkg = "echopkg" type = "echo_cmd.py" name = "echo_cmd" output = "screen" />
+
+  
+</launch>
